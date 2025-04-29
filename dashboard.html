@@ -53,10 +53,16 @@
       <tbody id="sessionTable"></tbody>
     </table>
   </div>
+  
   <script>
-      document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
       const authToken = localStorage.getItem('authToken');
-          
+      const body = document.body;  
+       
+      // Loading state
+      body.style.opacity = '0';
+      body.style.transition = 'opacity 0.3s';
+
       if (!authToken) {
         // No token found, redirect to login
         console.log('No auth token found, redirecting to login');
@@ -64,47 +70,41 @@
         return;
       }
     
-      // Verify token with backend
-      verifyToken(authToken);
-    });
-
-    function verifyToken(token) {
-      console.log('Verifying token...');
-
-      fetch('https://att-backend-nine.vercel.app/api/verify-token', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Invalid token');
-        }
-        return response.json();
-      })
-      .then(data => {
-        if (data.valid) {
-          console.log('Token verified, loading dashboard');
-          // Token is valid, continue loading dashboard
-          // loadDashboardData();
-        } else {
-          throw new Error('Token verification failed');
-        }
-      })
-      .catch(error => {
-        console.error('Authentication error:', error);
-        // Token verification failed, redirect to login
-        localStorage.removeItem('authToken');
+      // Verify token
+      verifyToken(authToken).then(()=>{
+        body.style.opacity = '1';
+        loadDashboardData();
+      }).catch(()=>{
+        localstorage.removeItem('authToken');
         window.location.href = 'index.html';
       });
+    });
+
+    async function verifyToken(token) {
+      try {
+        const response = await fetch('https://att-backend-nine.vercel.app/api/verify-token', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        if (!response.ok) throw new Error('Invalid token');
+        
+        const data = await response.json();
+        if (!data.valid) throw new Error('Token verification failed');
+        
+        return true;
+      } catch (error) {
+        console.error('Authentication error:', error);
+        localStorage.removeItem('authToken');
+        throw error; // Re-throw to handle in caller
+      }
     }
-    // function loadDashboardData() {
-    //   fetchClasses();
-    //   fetchSessions();
-    // }
-  </script>
-  
-  <script>
+
+    function loadDashboardData() {
+      fetchClasses();
+      fetchSessions();
+    }
     async function fetchClasses() {
       const response = await fetch('https://att-backend-nine.vercel.app/api/classes');
       return await response.json();

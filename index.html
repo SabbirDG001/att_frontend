@@ -230,14 +230,14 @@
                     
                     // Successful login
                     errorMessage.style.display = 'none';
-        
+                    
                     // Store the authentication token
-                    if (data.token) {
-                        localStorage.setItem('authToken', data.token);
-                    }
+                    localStorage.setItem('authToken', data.token);
         
                     // Redirect to dashboard
-                    window.location.href = 'dashboard.html';
+                    setTimeout(()=>{
+                        window.location.href = 'dashboard.html';
+                    }, 100);
                 })
                 .catch(error => {
                     console.error('Login error:', error);
