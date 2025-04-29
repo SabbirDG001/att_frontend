@@ -54,21 +54,23 @@
     </table>
   </div>
   <script>
-    // At the top of dashboard.html's <script> section
-    document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener('DOMContentLoaded', function() {
       const authToken = localStorage.getItem('authToken');
-    
+          
       if (!authToken) {
         // No token found, redirect to login
+        console.log('No auth token found, redirecting to login');
         window.location.href = 'index.html';
         return;
       }
-
-      // Optional: Verify token with backend
+    
+      // Verify token with backend
       verifyToken(authToken);
     });
 
     function verifyToken(token) {
+      console.log('Verifying token...');
+
       fetch('https://att-backend-nine.vercel.app/api/verify-token', {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -81,15 +83,25 @@
         return response.json();
       })
       .then(data => {
-        // Token is valid, continue loading dashboard
-        loadDashboardData();
+        if (data.valid) {
+          console.log('Token verified, loading dashboard');
+          // Token is valid, continue loading dashboard
+          // loadDashboardData();
+        } else {
+          throw new Error('Token verification failed');
+        }
       })
       .catch(error => {
+        console.error('Authentication error:', error);
         // Token verification failed, redirect to login
         localStorage.removeItem('authToken');
         window.location.href = 'index.html';
       });
     }
+    // function loadDashboardData() {
+    //   fetchClasses();
+    //   fetchSessions();
+    // }
   </script>
   
   <script>
