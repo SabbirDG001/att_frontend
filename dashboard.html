@@ -24,6 +24,21 @@
       border-top: 1px solid #ccc;
       padding-top: 20px;
     }
+    .logout-button {
+      background: linear-gradient(to right, #ff416c, #ff4b2b);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-right: 10px;
+    }
+
+    .logout-button:hover {
+      box-shadow: 0 7px 20px rgba(255, 75, 43, 0.6);
+      transform: translateY(-2px);
+    }
   </style>
 </head>
 <body>
@@ -32,6 +47,7 @@
   <div class="nav-buttons">
     <button onclick="location.href='add_class.html'">Add New Class</button>
     <button onclick="location.href='add_session.html'">Add New Session</button>
+    <button id="logout-button" class="logout-button">Logout</button>
   </div>
   
   <div class="classes-section">
@@ -78,6 +94,15 @@
         localstorage.removeItem('authToken');
         window.location.href = 'index.html';
       });
+      
+      // Add this with your other functions
+      function logout() {
+        localStorage.removeItem('authToken');
+        window.location.href = 'index.html';
+      }
+
+      // Add event listener (put this at the end of your DOMContentLoaded callback)
+      document.getElementById('logout-button').addEventListener('click', logout);
     });
 
     async function verifyToken(token) {
@@ -87,12 +112,12 @@
             'Authorization': `Bearer ${token}`
           }
         });
-        
+
         if (!response.ok) throw new Error('Invalid token');
-        
+
         const data = await response.json();
         if (!data.valid) throw new Error('Token verification failed');
-        
+
         return true;
       } catch (error) {
         console.error('Authentication error:', error);
