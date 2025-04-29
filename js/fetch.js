@@ -14,7 +14,25 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Fetch class data and student attendance
     fetchClassData(classId);
+    
+    // Setup Select All button functionality
+    setupSelectAllButton();
 });
+
+function setupSelectAllButton() {
+    const selectAllButton = document.getElementById('selectAll');
+    let allSelected = false;
+    
+    selectAllButton.addEventListener('click', () => {
+        allSelected = !allSelected;
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.checked = allSelected;
+        });
+        
+        // Update button text based on state
+        selectAllButton.textContent = allSelected ? 'Deselect All' : 'Select All';
+    });
+}
 
 async function fetchClassData(classId) {
     try {
@@ -119,6 +137,9 @@ function populateTable(students) {
     });
 
     setupCellClickHandlers();
+    
+    // Reset the Select All button state after repopulating the table
+    document.getElementById('selectAll').textContent = 'Select All';
 }
 
 function setupCellClickHandlers() {
@@ -186,6 +207,7 @@ document.getElementById('submit').addEventListener('click', async () => {
             checkbox.checked = false; // Uncheck all checkboxes
         });
         document.getElementById("atdcnt").value = 1; // Reset attendance count to default
+        document.getElementById('selectAll').textContent = 'Select All';
         
     } catch (error) {
         console.error('Error:', error);
@@ -285,8 +307,6 @@ document.getElementById('see_all').addEventListener('click', async () => {
     }
 });
 
-
-
 // download as CSV
 document.getElementById('seeAllButton').addEventListener('click', async function() {
     try {
@@ -375,6 +395,7 @@ document.getElementById('reset').addEventListener('click', () => {
         checkbox.checked = false;
     });
     document.getElementById("atdcnt").value = 1;
+    document.getElementById('selectAll').textContent = 'Select All';
 });
 
 function showSuccess(message) {
