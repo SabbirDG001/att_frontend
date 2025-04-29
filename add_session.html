@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Session</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h2 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    input, select, button, textarea {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      display: block;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      padding: 12px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .status {
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 4px;
+      display: none;
+    }
+    .success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    .tab {
+      overflow: hidden;
+      border: 1px solid #ccc;
+      background-color: #f1f1f1;
+      margin-bottom: 20px;
+    }
+    .tab button {
+      background-color: inherit;
+      float: left;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 14px 16px;
+      transition: 0.3s;
+      color: #333;
+    }
+    .tab button:hover {
+      background-color: #ddd;
+    }
+    .tab button.active {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .tabcontent {
+      display: none;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-top: none;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .actions {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    #studentTable {
+      margin-top: 30px;
+    }
+    .student-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .student-row input {
+      flex: 1;
+    }
+    .remove-btn {
+      background-color: #f44336;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      padding: 10px;
+    }
+    .remove-btn:hover {
+      background-color: #d32f2f;
+    }
+    .add-student-btn {
+      background-color: #2196F3;
+      width: 200px;
+      margin-bottom: 20px;
+    }
+    #bulkUpload {
+      margin-top: 20px;
+    }
+    #bulkStudents {
+      width: 100%;
+      height: 200px;
+      font-family: monospace;
+    }
+    .nav-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: #2196F3;
+      text-decoration: none;
+    }
+    .nav-link:hover {
+      text-decoration: underline;
+    }
+    
+  </style>
+</head>
+<body>
+  <a href="index.html" class="nav-link">← Back to Class Dashboard</a>
+  <h2>Add New Session</h2>
+  
+  <div class="tab">
+    <button class="tablinks active" onclick="openTab(event, 'basicInfo')">Basic Info</button>
+    <button class="tablinks" onclick="openTab(event, 'addStudents')">Add Students</button>
+    <button class="tablinks" onclick="openTab(event, 'bulkUpload')">Bulk Upload</button>
+  </div>
+  
+  <div id="basicInfo" class="tabcontent" style="display: block;">
+    <form id="sessionForm">
+      <div>
+        <label for="sessionName">Session Name:</label>
+        <input type="text" id="sessionName" placeholder="e.g., 2026-2027" required />
+        <small>Typically in the format YYYY-YYYY (e.g., 2026-2027)</small>
+      </div>
+      
+      <div class="actions">
+        <button type="submit">Create Session</button>
+      </div>
+    </form>
+  </div>
+  
+  <div id="addStudents" class="tabcontent">
+    <h3>Add Students to Session: <span id="currentSession"></span></h3>
+    <p>Enter student information below. At least one student is required.</p>
+    
+    <div id="studentsList">
+      <div class="student-row">
+        <input type="text" class="studentId" placeholder="Student ID" required />
+        <input type="text" class="studentName" placeholder="Student Name" required />
+        <button type="button" class="remove-btn" onclick="removeStudentRow(this)">✕</button>
+      </div>
+    </div>
+    
+    <button type="button" class="add-student-btn" onclick="addStudentRow()">+ Add Another Student</button>
+    
+    <div class="actions">
+      <button type="button" id="saveStudents">Save Students</button>
+    </div>
+  </div>
+  
+  <div id="bulkUpload" class="tabcontent">
+    <h3>Bulk Upload Students for Session: <span id="currentSession2"></span></h3>
+    <p>Paste your student data in CSV format below (StudentID,StudentName):</p>
+    <textarea id="bulkStudents" placeholder="101,John Smith
+102,Jane Doe
+103,Michael Johnson"></textarea>
+    <p><small>Each line should contain: StudentID,StudentName</small></p>
+    
+    <div class="actions">
+      <button type="button" id="processBulk">Process and Save</button>
+    </div>
+  </div>
+  
+  <div id="studentTable">
+    <h3>Current Students in Session</h3>
+    <table id="studentsListTable">
+      <thead>
+        <tr>
+          <th>Student ID</th>
+          <th>Name</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="studentsTableBody">
+        <!-- Students will be loaded here -->
+        <tr>
+          <td colspan="3">No students added yet</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div id="status" class="status"></div>
+  
+  <script>
+    // Global variables
+    let currentSessionId = '';
+    let currentSessionName = '';
+    
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Setup form submission
+      document.getElementById('sessionForm').addEventListener('submit', createSession);
+      
+      // Setup student save
+      document.getElementById('saveStudents').addEventListener('click', saveStudents);
+      
+      // Setup bulk process
+      document.getElementById('processBulk').addEventListener('click', processBulkStudents);
+      
+      // Get session from URL if editing
+      const urlParams = new URLSearchParams(window.location.search);
+      const sessionName = urlParams.get('name');
+      
+      if (sessionName) {
+        currentSessionName = sessionName;
+        document.getElementById('sessionName').value = sessionName;
+        document.getElementById('sessionName').readOnly = true;
+        document.getElementById('currentSession').textContent = sessionName;
+        document.getElementById('currentSession2').textContent = sessionName;
+        
+        // Load existing students
+        await loadExistingStudents(sessionName);
+        
+        // Switch to students tab
+        document.querySelector('.tablinks[onclick*="addStudents"]').click();
+      }
+    });
+    
+    function openTab(evt, tabName) {
+      // Hide all tab content
+      const tabcontent = document.getElementsByClassName("tabcontent");
+      for (let i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+      
+      // Remove active class from all tab buttons
+      const tablinks = document.getElementsByClassName("tablinks");
+      for (let i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+      
+      // Show current tab and set button to active
+      document.getElementById(tabName).style.display = "block";
+      evt.currentTarget.className += " active";
+    }
+    
+    async function createSession(event) {
+      event.preventDefault();
+      
+      const sessionName = document.getElementById('sessionName').value.trim();
+      
+      if (!sessionName) {
+        showStatus('Please enter a session name', 'error');
+        return;
+      }
+      
+      try {
+        showStatus('Creating session...', 'info');
+        
+        // Create the new session
+        const response = await fetch('http://localhost:3000/api/sessions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: sessionName,
+            data: [],
+            students: []
+          }),
+        });
+        
+        const result = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(result.error || 'Failed to create session');
+        }
+        
+        showStatus('Session created successfully!', 'success');
+        
+        // Set current session
+        currentSessionName = sessionName;
+        currentSessionId = result.session._id;
+        
+        // Update session name in other tabs
+        document.getElementById('currentSession').textContent = sessionName;
+        document.getElementById('currentSession2').textContent = sessionName;
+        
+        // Switch to add students tab
+        document.querySelector('.tablinks[onclick*="addStudents"]').click();
+        
+      } catch (error) {
+        console.error('Error creating session:', error);
+        showStatus('Error: ' + error.message, 'error');
+      }
+    }
+    
+    function addStudentRow() {
+      const studentsList = document.getElementById('studentsList');
+      const newRow = document.createElement('div');
+      newRow.className = 'student-row';
+      newRow.innerHTML = `
+        <input type="text" class="studentId" placeholder="Student ID" required />
+        <input type="text" class="studentName" placeholder="Student Name" required />
+        <button type="button" class="remove-btn" onclick="removeStudentRow(this)">✕</button>
+      `;
+      studentsList.appendChild(newRow);
+    }
+    
+    function removeStudentRow(button) {
+      const row = button.parentNode;
+      row.parentNode.removeChild(row);
+    }
+    
+    async function saveStudents() {
+      if (!currentSessionName) {
+        showStatus('Please create a session first', 'error');
+        return;
+      }
+      
+      const studentRows = document.querySelectorAll('.student-row');
+      const students = [];
+      
+      for (const row of studentRows) {
+        const studentId = row.querySelector('.studentId').value.trim();
+        const studentName = row.querySelector('.studentName').value.trim();
+        
+        if (studentId && studentName) {
+          students.push({
+            studentId: studentId,
+            name: studentName,
+            status: 0 // Default status
+          });
+        }
+      }
+      
+      if (students.length === 0) {
+        showStatus('Please add at least one student', 'error');
+        return;
+      }
+      
+      try {
+        showStatus('Saving students...', 'info');
+        
+        // Save students to the session
+        const response = await fetch(`http://localhost:3000/api/sessions/${currentSessionName}/students`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ students }),
+        });
+        
+        const result = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(result.error || 'Failed to save students');
+        }
+        
+        showStatus('Students saved successfully!', 'success');
+        
+        // Refresh the table
+        await loadExistingStudents(currentSessionName);
+        
+      } catch (error) {
+        console.error('Error saving students:', error);
+        showStatus('Error: ' + error.message, 'error');
+      }
+    }
+    
+    async function processBulkStudents() {
+      if (!currentSessionName) {
+        showStatus('Please create a session first', 'error');
+        return;
+      }
+      
+      const bulkText = document.getElementById('bulkStudents').value.trim();
+      
+      if (!bulkText) {
+        showStatus('Please enter student data', 'error');
+        return;
+      }
+      
+      const lines = bulkText.split('\n');
+      const students = [];
+      
+      for (const line of lines) {
+        const parts = line.split(',');
+        
+        if (parts.length >= 2) {
+          const studentId = parts[0].trim();
+          const studentName = parts[1].trim();
+          
+          if (studentId && studentName) {
+            students.push({
+              studentId: studentId,
+              name: studentName,
+              status: 0 // Default status
+            });
+          }
+        }
+      }
+      
+      if (students.length === 0) {
+        showStatus('No valid student data found', 'error');
+        return;
+      }
+      
+      try {
+        showStatus(`Processing ${students.length} students...`, 'info');
+        
+        // Save students to the session
+        const response = await fetch(`http://localhost:3000/api/sessions/${currentSessionName}/students`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ students }),
+        });
+        
+        const result = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(result.error || 'Failed to save students');
+        }
+        
+        showStatus(`${students.length} students saved successfully!`, 'success');
+        
+        // Clear the textarea
+        document.getElementById('bulkStudents').value = '';
+        
+        // Refresh the table
+        await loadExistingStudents(currentSessionName);
+        
+      } catch (error) {
+        console.error('Error processing bulk students:', error);
+        showStatus('Error: ' + error.message, 'error');
+      }
+    }
+    
+    async function loadExistingStudents(sessionName) {
+      try {
+        const response = await fetch(`http://localhost:3000/api/sessions/${sessionName}`);
+        
+        if (!response.ok) {
+          throw new Error('Failed to load session data');
+        }
+        
+        const sessionData = await response.json();
+        const students = sessionData.students || [];
+        
+        const tableBody = document.getElementById('studentsTableBody');
+        tableBody.innerHTML = '';
+        
+        if (students.length === 0) {
+          tableBody.innerHTML = '<tr><td colspan="3">No students added yet</td></tr>';
+          return;
+        }
+        
+        students.forEach(student => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${student.studentId}</td>
+            <td>${student.name}</td>
+            <td>
+              <button onclick="removeStudent('${student.studentId}')" class="remove-btn">Remove</button>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+        
+      } catch (error) {
+        console.error('Error loading students:', error);
+        showStatus('Error loading students: ' + error.message, 'error');
+      }
+    }
+    
+    async function removeStudent(studentId) {
+      if (!confirm(`Are you sure you want to remove student ${studentId}?`)) {
+        return;
+      }
+      
+      try {
+        const response = await fetch(`http://localhost:3000/api/sessions/${currentSessionName}/students/${studentId}`, {
+          method: 'DELETE'
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to remove student');
+        }
+        
+        showStatus('Student removed successfully', 'success');
+        
+        // Refresh the table
+        await loadExistingStudents(currentSessionName);
+        
+      } catch (error) {
+        console.error('Error removing student:', error);
+        showStatus('Error: ' + error.message, 'error');
+      }
+    }
+    
+    function showStatus(message, type) {
+      const statusElement = document.getElementById('status');
+      statusElement.textContent = message;
+      statusElement.className = 'status';
+      
+      if (type === 'success') {
+        statusElement.classList.add('success');
+      } else if (type === 'error') {
+        statusElement.classList.add('error');
+      } else {
+        statusElement.style.backgroundColor = '#e2e3e5';
+        statusElement.style.color = '#383d41';
+        statusElement.style.border = '1px solid #d6d8db';
+      }
+      
+      statusElement.style.display = 'block';
+      
+      // Auto-hide after 4 seconds for success messages
+      if (type === 'success') {
+        setTimeout(() => {
+          statusElement.style.display = 'none';
+        }, 4000);
+      }
+    }
+  </script>
+</body>
+</html>
