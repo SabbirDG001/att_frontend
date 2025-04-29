@@ -56,12 +56,12 @@
   
   <script>
     async function fetchClasses() {
-      const response = await fetch('http://localhost:3000/api/classes');
+      const response = await fetch('https://att-backend-nine.vercel.app/api/classes');
       return await response.json();
     }
 
     async function fetchSessions() {
-      const response = await fetch('http://localhost:3000/api/sessions');
+      const response = await fetch('https://att-backend-nine.vercel.app/api/sessions');
       return await response.json();
     }
 
@@ -69,7 +69,7 @@
       const confirmed = confirm('Are you sure you want to delete this class?');
       if (!confirmed) return;
 
-      const res = await fetch(`http://localhost:3000/api/classes/${id}`, {
+      const res = await fetch(`https://att-backend-nine.vercel.app/api/classes/${id}`, {
         method: 'DELETE'
       });
 
@@ -85,7 +85,7 @@
       const confirmed = confirm('Are you sure you want to delete this session? This will also delete all classes and attendance records associated with this session.');
       if (!confirmed) return;
 
-      const res = await fetch(`http://localhost:3000/api/sessions/${name}`, {
+      const res = await fetch(`https://att-backend-nine.vercel.app/api/sessions/${name}`, {
         method: 'DELETE'
       });
 
