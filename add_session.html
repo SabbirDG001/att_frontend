@@ -297,7 +297,7 @@
         showStatus('Creating session...', 'info');
         
         // Create the new session
-        const response = await fetch('https://att-backend-nine.vercel.app/api/sessions', {
+        const response = await fetch('https://att-backend-alpha.vercel.app/api/sessions', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -382,7 +382,7 @@
         showStatus('Saving students...', 'info');
         
         // Save students to the session
-        const response = await fetch(`https://att-backend-nine.vercel.app/api/sessions/${currentSessionName}/students`, {
+        const response = await fetch(`https://att-backend-alpha.vercel.app/api/sessions/${currentSessionName}/students`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -449,7 +449,7 @@
         showStatus(`Processing ${students.length} students...`, 'info');
         
         // Save students to the session
-        const response = await fetch(`https://att-backend-nine.vercel.app/api/sessions/${currentSessionName}/students`, {
+        const response = await fetch(`https://att-backend-alpha.vercel.app/api/sessions/${currentSessionName}/students`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -479,7 +479,7 @@
     
     async function loadExistingStudents(sessionName) {
       try {
-        const response = await fetch(`https://att-backend-nine.vercel.app/api/sessions/${sessionName}`);
+        const response = await fetch(`https://att-backend-alpha.vercel.app/api/sessions/${sessionName}`);
         
         if (!response.ok) {
           throw new Error('Failed to load session data');
@@ -520,7 +520,7 @@
       }
       
       try {
-        const response = await fetch(`https://att-backend-nine.vercel.app/api/sessions/${currentSessionName}/students/${studentId}`, {
+        const response = await fetch(`https://att-backend-alpha.vercel.app/api/sessions/${currentSessionName}/students/${studentId}`, {
           method: 'DELETE'
         });
         

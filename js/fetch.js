@@ -266,6 +266,7 @@ document.getElementById('see_all').addEventListener('click', async () => {
         // Create the table
         const table = document.createElement('table');
         table.classList.add('summary-table');
+        table.id = "scroll";
 
         const thead = document.createElement('thead');
         const headerRow = document.createElement('tr');
@@ -421,4 +422,4 @@ function createMessageElement(className) {
     return div;
 }
 
-const API_URL = 'https://att-backend-nine.vercel.app/api';
+const API_URL = 'https://att-backend-alpha.vercel.app/api';
