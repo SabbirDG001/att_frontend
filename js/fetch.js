@@ -266,7 +266,6 @@ document.getElementById('see_all').addEventListener('click', async () => {
         // Create the table
         const table = document.createElement('table');
         table.classList.add('summary-table');
-        table.id = "scroll";
 
         const thead = document.createElement('thead');
         const headerRow = document.createElement('tr');
@@ -301,6 +300,14 @@ document.getElementById('see_all').addEventListener('click', async () => {
 
         table.appendChild(tbody);
         section.appendChild(table);
+
+        // Scrolling System
+        setTimeout(() => {
+            section.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }, 100);
 
     } catch (error) {
         console.error('Error:', error);
