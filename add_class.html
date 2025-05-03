@@ -87,7 +87,7 @@
     
     async function loadSessions() {
       try {
-        const response = await fetch('https://attendence-backend-five.vercel.app/api/sessions');
+        const response = await fetch('https://attendence-backend-dqbz.onrender.com/api/sessions');
         
         if (!response.ok) {
           throw new Error('Failed to load sessions');
@@ -133,7 +133,7 @@
         showStatus('Creating class...', 'info');
         
         // Create the new class
-        const response = await fetch('https://attendence-backend-five.vercel.app/api/classes', {
+        const response = await fetch('https://attendence-backend-dqbz.onrender.com/api/classes', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
