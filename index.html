@@ -171,7 +171,7 @@
             }
             
             function verifyExistingToken(token) {
-                fetch('https://att-backend-ipnsm8oht-sabbirdg001s-projects.vercel.app/api/verify-token', {
+                fetch('https://att-backend-one.vercel.app/api/verify-token', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -205,7 +205,7 @@
                 errorMessage.style.display = 'none';
         
                 // API call to your backend
-                fetch('https://att-backend-ipnsm8oht-sabbirdg001s-projects.vercel.app/api/login', {
+                fetch('https://att-backend-one.vercel.app/api/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
