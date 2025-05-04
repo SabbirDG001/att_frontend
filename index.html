@@ -1,267 +1,291 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        overflow: hidden;
+      }
+
+      .login-container {
+        width: 380px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 16px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        padding: 40px;
+        position: relative;
+        z-index: 10;
+        backdrop-filter: blur(10px);
+        transform: translateY(0);
+        transition: transform 0.3s ease;
+      }
+
+      .login-container:hover {
+        transform: translateY(-5px);
+      }
+
+      .login-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .login-header h1 {
+        color: #333;
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+
+      .login-header p {
+        color: #666;
+        font-size: 15px;
+      }
+
+      .form-group {
+        margin-bottom: 25px;
+        position: relative;
+      }
+
+      .form-group label {
+        display: block;
+        color: #555;
+        margin-bottom: 8px;
+        font-size: 15px;
+        font-weight: 500;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 14px 16px;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.9);
+      }
+
+      .form-group input:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        outline: none;
+      }
+
+      .form-group input::placeholder {
+        color: #aaa;
+      }
+
+      .login-button {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(to right, #667eea, #764ba2);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        margin-top: 10px;
+      }
+
+      .login-button:hover {
+        box-shadow: 0 7px 20px rgba(102, 126, 234, 0.6);
+        transform: translateY(-2px);
+      }
+
+      .login-button:active {
+        transform: translateY(0);
+        box-shadow: 0 5px 10px rgba(102, 126, 234, 0.4);
+      }
+
+      .error-message {
+        background-color: rgba(255, 82, 82, 0.1);
+        border-left: 4px solid #ff5252;
+        color: #d32f2f;
+        padding: 15px;
+        margin-bottom: 25px;
+        border-radius: 6px;
+        font-size: 14px;
+        display: none;
+        animation: shake 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
         }
-        
-        body {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            overflow: hidden;
+        10%,
+        30%,
+        50%,
+        70%,
+        90% {
+          transform: translateX(-5px);
         }
-        
-        .login-container {
-            width: 380px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 16px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-            padding: 40px;
-            position: relative;
-            z-index: 10;
-            backdrop-filter: blur(10px);
-            transform: translateY(0);
-            transition: transform 0.3s ease;
+        20%,
+        40%,
+        60%,
+        80% {
+          transform: translateX(5px);
         }
-        
-        .login-container:hover {
-            transform: translateY(-5px);
-        }
-        
-        .login-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        
-        .login-header h1 {
-            color: #333;
-            font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-        
-        .login-header p {
-            color: #666;
-            font-size: 15px;
-        }
-        
-        .form-group {
-            margin-bottom: 25px;
-            position: relative;
-        }
-        
-        .form-group label {
-            display: block;
-            color: #555;
-            margin-bottom: 8px;
-            font-size: 15px;
-            font-weight: 500;
-        }
-        
-        .form-group input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 15px;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.9);
-        }
-        
-        .form-group input:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-            outline: none;
-        }
-        
-        .form-group input::placeholder {
-            color: #aaa;
-        }
-        
-        .login-button {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(to right, #667eea, #764ba2);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-            margin-top: 10px;
-        }
-        
-        .login-button:hover {
-            box-shadow: 0 7px 20px rgba(102, 126, 234, 0.6);
-            transform: translateY(-2px);
-        }
-        
-        .login-button:active {
-            transform: translateY(0);
-            box-shadow: 0 5px 10px rgba(102, 126, 234, 0.4);
-        }
-        
-        .error-message {
-            background-color: rgba(255, 82, 82, 0.1);
-            border-left: 4px solid #ff5252;
-            color: #d32f2f;
-            padding: 15px;
-            margin-bottom: 25px;
-            border-radius: 6px;
-            font-size: 14px;
-            display: none;
-            animation: shake 0.6s cubic-bezier(.36,.07,.19,.97) both;
-        }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-            20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
+      }
     </style>
-    <link rel="stylesheet" href="./css/footer.css">
-</head>
-<body>
+  </head>
+  <body>
     <div class="login-container">
-        <div class="login-header">
-            <h1>Welcome</h1>
-            <p>Enter your credentials to continue</p>
+      <div class="login-header">
+        <h1>Welcome</h1>
+        <p>Enter your credentials to continue</p>
+      </div>
+
+      <div class="error-message" id="error-message">
+        Incorrect username or password. Please try again.
+      </div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Enter your username"
+            required
+          />
         </div>
-        
-        <div class="error-message" id="error-message">
-            Incorrect username or password. Please try again.
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            required
+          />
         </div>
-        
-        <form id="login-form">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" placeholder="Enter your username" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter your password" required>
-            </div>
-            
-            <button type="submit" class="login-button">Login</button>
-        </form>
+
+        <button type="submit" class="login-button">Login</button>
+      </form>
     </div>
 
-     <!--Footer-->
-     <footer class="footer">
-        <p>© Copyright Sabbir (IT2007) & Abujar (IT22056)</p>
-      </footer>
-
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const loginForm = document.getElementById('login-form');
-            const errorMessage = document.getElementById('error-message');
-            
-            // Check if already logged in
-            const existingToken = localStorage.getItem('authToken');
-            if (existingToken) {
-                // Verify token before redirecting
-                verifyExistingToken(existingToken);
+      document.addEventListener("DOMContentLoaded", function () {
+        const loginForm = document.getElementById("login-form");
+        const errorMessage = document.getElementById("error-message");
+
+        // Check if already logged in
+        const existingToken = localStorage.getItem("authToken");
+        if (existingToken) {
+          // Verify token before redirecting
+          verifyExistingToken(existingToken);
+        }
+
+        function verifyExistingToken(token) {
+          fetch(
+            "https://attendence-backend-dqbz.onrender.com/api/verify-token",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             }
-            
-            function verifyExistingToken(token) {
-                fetch('https://attendence-backend-dqbz.onrender.com/api/verify-token', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.valid) {
-                        // Token is valid, redirect to dashboard
-                        window.location.href = 'dashboard.html';
-                    }
-                })
-                .catch(error => {
-                    console.error('Token verification failed:', error);
-                    // Don't do anything, just let user log in again
-                });
-            }
-            
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                // Show loading state
-                const submitButton = this.querySelector('button[type="submit"]');
-                const originalText = submitButton.textContent;
-                submitButton.textContent = 'Logging in...';
-                submitButton.disabled = true;
-                
-                const username = document.getElementById('username').value;
-                const password = document.getElementById('password').value;
-                
-                // Clear previous error
-                errorMessage.style.display = 'none';
-        
-                // API call to your backend
-                fetch('https://attendence-backend-dqbz.onrender.com/api/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        username: username,
-                        password: password
-                    })
-                })
-                .then(response => {
-                    // Reset button
-                    submitButton.textContent = originalText;
-                    submitButton.disabled = false;
-                    
-                    if (!response.ok) {
-                        throw new Error('Login failed');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Login successful:', data);
-                    
-                    // Successful login
-                    errorMessage.style.display = 'none';
-                    
-                    // Store the authentication token
-                    localStorage.setItem('authToken', data.token);
-        
-                    // Redirect to dashboard
-                    setTimeout(()=>{
-                        window.location.href = 'dashboard.html';
-                    }, 100);
-                })
-                .catch(error => {
-                    console.error('Login error:', error);
-                    
-                    // Reset button
-                    submitButton.textContent = originalText;
-                    submitButton.disabled = false;
-                    
-                    // Show error message
-                    errorMessage.style.display = 'block';
-                    // Reset animation to trigger it again
-                    errorMessage.style.animation = 'none';
-                    setTimeout(() => {
-                        errorMessage.style.animation = 'shake 0.6s cubic-bezier(.36,.07,.19,.97) both';
-                    }, 10);
-                });
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.valid) {
+                // Token is valid, redirect to dashboard
+                window.location.href = "dashboard.html";
+              }
+            })
+            .catch((error) => {
+              console.error("Token verification failed:", error);
+              // Don't do anything, just let user log in again
+            });
+        }
+
+        loginForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          // Show loading state
+          const submitButton = this.querySelector('button[type="submit"]');
+          const originalText = submitButton.textContent;
+          submitButton.textContent = "Logging in...";
+          submitButton.disabled = true;
+
+          const username = document.getElementById("username").value;
+          const password = document.getElementById("password").value;
+
+          // Clear previous error
+          errorMessage.style.display = "none";
+
+          // API call to your backend
+          fetch("https://attendence-backend-dqbz.onrender.com/api/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username: username,
+              password: password,
+            }),
+          })
+            .then((response) => {
+              // Reset button
+              submitButton.textContent = originalText;
+              submitButton.disabled = false;
+
+              if (!response.ok) {
+                throw new Error("Login failed");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log("Login successful:", data);
+
+              // Successful login
+              errorMessage.style.display = "none";
+
+              // Store the authentication token
+              localStorage.setItem("authToken", data.token);
+
+              // Redirect to dashboard
+              setTimeout(() => {
+                window.location.href = "dashboard.html";
+              }, 100);
+            })
+            .catch((error) => {
+              console.error("Login error:", error);
+
+              // Reset button
+              submitButton.textContent = originalText;
+              submitButton.disabled = false;
+
+              // Show error message
+              errorMessage.style.display = "block";
+              // Reset animation to trigger it again
+              errorMessage.style.animation = "none";
+              setTimeout(() => {
+                errorMessage.style.animation =
+                  "shake 0.6s cubic-bezier(.36,.07,.19,.97) both";
+              }, 10);
             });
         });
+      });
     </script>
-</body>
+  </body>
 </html>
